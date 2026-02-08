@@ -4,13 +4,13 @@ const errorHandler = (err, req, res, next) => {
     try {
         console.log(err);
 
-        // Validation Errors Zod
-        if (err instanceof ZodError) {
-            return res.status(400).json({
-                message: "Validation failed",
-                errors: err.errors, 
+        // Validation Error
+        if (err.issues) {
+            return res.status(err.statusCode || 400).json({
+                message: err.message || "Validation failed",
+                errors: err.issues
             });
-        }   
+        }
 
         // Other errors
         const errorMessage = err.message || 'Internal Server Error';
