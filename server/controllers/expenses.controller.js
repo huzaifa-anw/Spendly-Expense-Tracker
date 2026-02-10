@@ -1,6 +1,4 @@
-import { success } from 'zod';
 import Expense from '../models/expense.model.js'
-import expensesRouter from '../routes/expenses.routes.js';
 import { createExpenseSchema, updateExpenseSchema } from '../schemas/expenses.schema.js'
 
 export const getExpenses = async (req, res, next) => {
@@ -42,7 +40,7 @@ export const createExpense = async (req, res, next) => {
 
         const expense = await Expense.create({name, amount, category, note, date, userId});
         
-        return res.status(201).json({success: true, msg: 'expense created', expense});
+        return res.status(201).json({success: true, msg: 'Expense created successfully', expense});
     } catch (error) {
         next(error);
     }
@@ -52,16 +50,22 @@ export const updateExpense = async (req, res, next) => {
     try {
         const { id } = req.params;
         if(!id) {
-            const err = new Error('id not found in params');
+            const err = new Error('Expense id not found in params');
             err.statusCode = 400;
             throw err;
         }
 
         const previousExpense = await Expense.findById(id);
-        const expenseOwnerid = previousExpense.userId;
+        if (!previousExpense) {
+            const err = new Error('Expense not found');
+            err.statusCode = 404;
+            throw err;
+        }
+
+        const expenseOwnerId = previousExpense.userId;
         const expenseId = previousExpense._id
 
-        if(!previousExpense.userId.equals(req.user._id)) {
+        if(!expenseOwnerId.equals(req.user._id)) {
             const err = new Error('Cant update expenses of other users');
             err.statusCode = 401;
             throw err;
@@ -77,15 +81,49 @@ export const updateExpense = async (req, res, next) => {
 
         const { name, amount, date, note, category } = validationResult.data;
 
-        const updatedExpense = await Expense.findOneAndUpdate(
-            {_id: expenseId},
-            {name, amount, date, note, category, userId: expenseOwnerid},
-            {returnDocument: 'after'}
-        )
+        const updatedExpense = await Expense.findByIdAndUpdate(
+            expenseId,
+            { name, amount, date, note, category },
+            { new: true } 
+        );
 
-        return res.status(200).json({success: true, msg: 'expense updated successfully', updatedExpense});
+        return res.status(200).json({success: true, msg: 'Expense updated successfully', updatedExpense});
 
     } catch (error) {
         next(error);
+    }
+}
+
+export const deleteExpense = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        if(!id) {
+            const error = new Error('expense id not found in params');
+            error.statusCode = 400;
+            throw error;
+        }
+
+        const previousExpense = await Expense.findById(id);
+        if (!previousExpense) {
+            const err = new Error('Expense not found');
+            err.statusCode = 404;
+            throw err;
+        }
+
+        const expenseOwnerId = previousExpense.userId;
+        const expenseId = previousExpense._id;
+
+        if(!expenseOwnerId.equals(req.user._id)){
+            const err = new Error('Cant delete expenses of other users');
+            err.statusCode = 401;
+            throw err;
+        }
+
+        await Expense.findByIdAndDelete(expenseId);
+
+        return res.status(200).json({success: true, msg: 'Expense deleted successfully'})
+
+    } catch (error) {
+        next(error)
     }
 }
