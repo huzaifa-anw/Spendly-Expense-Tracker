@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+import {EXPENSE_CATEGORIES} from '../constants.js'
+
 const expenseSchema = new mongoose.Schema(
     {
         name: {
@@ -16,6 +18,20 @@ const expenseSchema = new mongoose.Schema(
             type: Date,
             required: [true, 'expense model: date is required'],
             default: Date.now
+        },
+        note: {
+            type: String,
+            maxLength: 50
+        },
+        category: {
+            type: String,
+            enum: EXPENSE_CATEGORIES,
+            required: [true, 'expense model: category is required'],
+        },
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true
         }
     },
     {timestamps: true}
