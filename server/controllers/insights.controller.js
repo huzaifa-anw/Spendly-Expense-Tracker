@@ -104,14 +104,14 @@ export const dashboard = async (req, res, next) => {
 
         const finalBreakdown = categoriesBreakdown.map((category) => {
             return {...category, 
-                percentage: parseFloat(((category.totalSpent / grandTotal) * 100).toFixed(2))
+                percentage: grandTotal > 0 ? parseFloat(((category.totalSpent / grandTotal) * 100).toFixed(2)) : 0
             }
         })
 
         res.status(200).json({success: true, 
             msg: "fetched all user insights",
-            mostSpentCategory: mostSpentCategory[0], 
-            highestExpense: highestExpense[0], 
+            mostSpentCategory: mostSpentCategory[0] || null, 
+            highestExpense: highestExpense[0] || null, 
             categoriesBreakdown: finalBreakdown
         });
 
