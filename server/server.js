@@ -8,6 +8,7 @@ import logger from './middlewares/logger.middleware.js';
 import errorHandler from './middlewares/errorHandler.middleware.js';
 import cookieParser from 'cookie-parser';
 import authenticate from './middlewares/auhenticate.middleware.js';
+import { generalLimiter } from './middlewares/rateLimit.middleware.js';
 
 dotenv.config()
 
@@ -20,11 +21,11 @@ app.use(cookieParser());
 
 app.use(logger);
 
+app.use(generalLimiter);
+
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/expenses', expensesRouter);
 app.use('/api/v1/insights', insightsRouter);
-
-// test routes
 
 app.use(errorHandler);
 
