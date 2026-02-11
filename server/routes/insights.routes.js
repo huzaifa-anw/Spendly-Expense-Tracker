@@ -1,8 +1,9 @@
 import { Router } from "express";
+import authenticate from '../middlewares/auhenticate.middleware.js'
+import { dashboard } from '../controllers/insights.controller.js'
 
 const insightsRouter = Router();
 
-insightsRouter.get('/most-spent', (req, res) => res.json({msg: 'welcome to /most-spent'}));
-insightsRouter.get('/breakdown', (req, res) => res.json({msg: 'welcome to /breakdown'}));
+insightsRouter.get('/dashboard', authenticate, dashboard);
 
 export default insightsRouter;

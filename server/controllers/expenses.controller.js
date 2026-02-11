@@ -67,7 +67,7 @@ export const updateExpense = async (req, res, next) => {
 
         if(!expenseOwnerId.equals(req.user._id)) {
             const err = new Error('Cant update expenses of other users');
-            err.statusCode = 401;
+            err.statusCode = 403;
             throw err;
         }
 
@@ -115,7 +115,7 @@ export const deleteExpense = async (req, res, next) => {
 
         if(!expenseOwnerId.equals(req.user._id)){
             const err = new Error('Cant delete expenses of other users');
-            err.statusCode = 401;
+            err.statusCode = 403;
             throw err;
         }
 
