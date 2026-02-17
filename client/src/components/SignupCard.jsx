@@ -14,8 +14,18 @@ function SignupCard() {
     const handleSignup = async (e) => {
         e.preventDefault();
 
-        if (!form.name || !form.email || !form.password) {
-            setError("All fields are required");
+        if(!form.name) {
+            setError('Name is required');
+            return;
+        }
+
+        if(!form.email) {
+            setError('Email is required');
+            return;
+        }
+
+        if(!form.password) {
+            setError('Password is required');
             return;
         }
 
