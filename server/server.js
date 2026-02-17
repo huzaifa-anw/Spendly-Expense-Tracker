@@ -9,6 +9,7 @@ import errorHandler from './middlewares/errorHandler.middleware.js';
 import cookieParser from 'cookie-parser';
 import authenticate from './middlewares/auhenticate.middleware.js';
 import { generalLimiter } from './middlewares/rateLimit.middleware.js';
+import cors from 'cors';
 
 dotenv.config()
 
@@ -16,6 +17,12 @@ connectDB();
 
 const app = express();
 
+var corsOptions = {
+  origin: 'http://localhost:5173',
+  optionsSuccessStatus: 200 
+}
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
