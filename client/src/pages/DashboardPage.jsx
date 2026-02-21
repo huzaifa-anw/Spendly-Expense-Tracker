@@ -55,7 +55,7 @@ function DashboardPage ({name}) {
                         <h1 className="font-semibold mb-3 text-2xl">Expenses</h1>
                         {expenseError ?? <p className="text-red-600">Failed to fetch Expenses</p>}
                         {expenses.map((expense) => {
-                            return <ExpenseItem key={expense._id} name={expense.name} amount={expense.amount} dateCreated={expense.date} />
+                            return <ExpenseItem key={expense._id} name={expense.name} category={expense.category} amount={expense.amount} dateCreated={expense.date} />
                         })}
                     </div>
                 </div>
