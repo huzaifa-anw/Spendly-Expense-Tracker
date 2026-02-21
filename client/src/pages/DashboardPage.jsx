@@ -37,6 +37,23 @@ function DashboardPage ({name}) {
         getExpenses();
     }, [])
 
+    const handleDelete = async (id) => {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.delete(`http://localhost:3000/api/v1/expenses/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }      
+            );
+            setExpenses(prev => prev.filter(expense => expense._id !== id) );
+        } catch (error) {
+            console.log(error);
+            console.dir(error.response);
+            alert('Failed to delete expense');
+        }
+    }
+
     return (
         <>
 
@@ -55,7 +72,14 @@ function DashboardPage ({name}) {
                         <h1 className="font-semibold mb-3 text-2xl">Expenses</h1>
                         {expenseError ?? <p className="text-red-600">Failed to fetch Expenses</p>}
                         {expenses.map((expense) => {
-                            return <ExpenseItem key={expense._id} name={expense.name} category={expense.category} amount={expense.amount} dateCreated={expense.date} />
+                            return <ExpenseItem     
+                                        key={expense._id} 
+                                        name={expense.name}     
+                                        category={expense.category} 
+                                        amount={expense.amount} 
+                                        dateCreated={expense.date} 
+                                        handleDelete={() => handleDelete(expense._id)}
+                                    />
                         })}
                     </div>
                 </div>

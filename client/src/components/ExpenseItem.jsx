@@ -45,7 +45,7 @@ export default function ExpenseItem({
   amount,
   dateCreated,
   onUpdate, // callback for update
-  onDelete, // callback for delete
+  handleDelete, // callback for delete
 }) {
     const formattedDate = dayjs(dateCreated).format('D/M/YY');
     console.log(category);
@@ -280,7 +280,7 @@ export default function ExpenseItem({
         </div>
 
         {/* Name + Date */}
-        <div className="flex flex-col justify-center">
+        <div className="flex flex-col justify-center min-w-50">
             <h3 className="text-base font-semibold text-gray-800">
             {name}
             </h3>
@@ -314,7 +314,7 @@ export default function ExpenseItem({
 
             {/* Delete Button */}
             <button
-                onClick={onDelete}
+                onClick={handleDelete}
                 className="p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition"
             >
                 <Trash2 size={16} />
