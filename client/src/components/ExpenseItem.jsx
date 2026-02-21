@@ -2,7 +2,6 @@ import {
     Trash2,
     Edit2,
     Utensils,
-    UtilityPole,
     Soup,
     ShoppingCart,
     Coffee,
@@ -10,24 +9,21 @@ import {
     Fuel,
     ParkingCircle,
     Home,
-    Lightbulb,
     Wrench,
     Sofa,
     Smartphone,
     Wifi,
-    CreditCard,
     GraduationCap,
     BookOpen,
     Briefcase,
     HeartPulse,
     Pill,
     Dumbbell,
+    Clapperboard,
     Shield,
     ShoppingBag,
     Shirt,
     Sparkles,
-    Laptop,
-    Film,
     Ticket,
     Plane,
     Gift,
@@ -36,7 +32,10 @@ import {
     Receipt,
     PiggyBank,
     AlertTriangle,
-    MoreHorizontal
+    MoreHorizontal,
+    Package,
+    Plug,
+    Building2
 } from "lucide-react";
 import dayjs from 'dayjs';
 
@@ -161,6 +160,7 @@ export default function ExpenseItem({
         switch (cat) {
             // 🍔 Food
             case "Food":
+            return <Soup size={20} />;
             case "Dining Out":
             return <Utensils size={20} />;
             case "Groceries":
@@ -178,13 +178,14 @@ export default function ExpenseItem({
 
             // 🏠 Home
             case "Rent":
+            return <Building2 size={20} />
             case "Home Maintenance":
             return <Home size={20} />;
             case "Furniture":
             return <Sofa size={20} />
             
             case "Utilities":
-            return <UtilityPole size={20} />
+            return <Wrench size={20} />
 
             // 📱 Bills & Digital
             case "Mobile Recharge":
@@ -196,6 +197,7 @@ export default function ExpenseItem({
 
             // 🎓 Education & Work
             case "Education":
+            return <GraduationCap size={20} />
             case "Books":
             return <BookOpen size={20} />;
             case "Work / Freelancing":
@@ -213,16 +215,19 @@ export default function ExpenseItem({
 
             // 🛍 Shopping
             case "Shopping":
-            case "Clothing":
-            case "Personal Care":
             return <ShoppingBag size={20} />;
+            case "Clothing":
+            return <Shirt size={20} />
+            case "Personal Care":
+            return <Sparkles size={20} />
             case "Electronics":
-            return <Smartphone size={20} />;
+            return <Plug size={20} />;
 
             // 🎬 Entertainment
             case "Entertainment":
+            return <Clapperboard size={20} />
             case "Events":
-            return <Tv size={20} />;
+            return <Ticket size={20} />;
 
             // ✈ Travel
             case "Travel":
@@ -232,6 +237,7 @@ export default function ExpenseItem({
             case "Gifts":
             return <Gift size={20} />;
             case "Charity":
+            return <Landmark size={20} />;
             case "Donations":
             return <HandHeart size={20} />;
 
@@ -239,7 +245,7 @@ export default function ExpenseItem({
             case "Loan Payment":
             return <Banknote size={20} />;
             case "Taxes / Fees":
-            return <Landmark size={20} />;
+            return <Receipt size={20} />;
 
             // 💰 Savings
             case "Savings":
@@ -248,6 +254,10 @@ export default function ExpenseItem({
             return <AlertTriangle size={20} />;
 
             // ❓ Other
+            case "Other":
+            return <MoreHorizontal size={20} />;
+            case "Miscellaneous":
+            return <Package size={20} />;
             default:
             return <HelpCircle size={20} />;
         }
