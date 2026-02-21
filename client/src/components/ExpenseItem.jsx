@@ -261,7 +261,7 @@ export default function ExpenseItem({
             default:
             return <HelpCircle size={20} />;
         }
-        }
+    }
 
     const categoryStyles = getCategoryStyles(category);
 
@@ -270,51 +270,56 @@ export default function ExpenseItem({
   return (
     <div className="w-full mb-3 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 px-6 py-4 flex items-center justify-between">
 
-      {/* LEFT SECTION */}
-      <div className="flex items-center gap-4">
-
-        {/* Category Icon */}
-        <div
-          className={`w-12 h-12 rounded-xl flex items-center justify-center ${categoryStyles}`}
-        >
-          {categoryIcon}
+        {/* LEFT SECTION */}
+        <div className="flex items-center gap-4 h-16">
+            {/* Category Icon */}
+            <div
+                className={`w-12 h-12 rounded-xl shrink-0 flex items-center justify-center ${categoryStyles}`}
+            >
+                {categoryIcon}
         </div>
 
         {/* Name + Date */}
-        <div className="flex flex-col">
-          <h3 className="text-base font-semibold text-gray-800">
+        <div className="flex flex-col justify-center">
+            <h3 className="text-base font-semibold text-gray-800">
             {name}
-          </h3>
-          <span className="text-sm text-gray-500">
+            </h3>
+            <span className="text-sm text-gray-500">
             {formattedDate}
-          </span>
+            </span>
         </div>
-      </div>
+        </div>
 
-      {/* RIGHT SECTION */}
-      <div className="flex items-center gap-4">
+        {/* MIDDLE SECTION - Category Name */}
+        <div className="flex-1 flex items-center justify-center">
+            <span className="text-sm font-medium text-gray-600">
+                {category}
+            </span>
+        </div>
 
-        {/* Amount */}
-        <span className="text-lg font-semibold text-gray-800">
-          Rs {amount}
-        </span>
+        {/* RIGHT SECTION */}
+        <div className="flex items-center gap-4 h-16">
+            {/* Amount */}
+            <span className="text-lg font-semibold text-gray-800">
+                Rs {amount}
+            </span>
 
-        {/* Update Button */}
-        <button
-          onClick={onUpdate}
-          className="p-2 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200 transition flex items-center gap-1"
-        >
-          <Edit2 size={16} />
-        </button>
+            {/* Update Button */}
+            <button
+                onClick={onUpdate}
+                className="p-2 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200 transition"
+            >
+                <Edit2 size={16} />
+            </button>
 
-        {/* Delete Button */}
-        <button
-          onClick={onDelete}
-          className="p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition flex items-center gap-1"
-        >
-          <Trash2 size={16} />
-        </button>
-      </div>
+            {/* Delete Button */}
+            <button
+                onClick={onDelete}
+                className="p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition"
+            >
+                <Trash2 size={16} />
+            </button>
+        </div>
     </div>
   );
 }
