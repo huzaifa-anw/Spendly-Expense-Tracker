@@ -48,7 +48,6 @@ export default function ExpenseItem({
   handleDelete, // callback for delete
 }) {
     const formattedDate = dayjs(dateCreated).format('D/M/YY');
-    console.log(category);
     function getCategoryStyles(cat) {
         switch (cat) {
             // 🍔 Food

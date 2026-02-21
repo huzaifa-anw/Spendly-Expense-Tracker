@@ -15,6 +15,8 @@ function DashboardPage ({name}) {
     // const [breakdown, setBreakdown] = useState([]);
     // const [breakdownError, setBreakdownError] = useState(false);
 
+    const [totalSpent, setTotalSpent] = useState(0);
+
     useEffect(() => {
         async function getExpenses() {
             try {
@@ -25,7 +27,12 @@ function DashboardPage ({name}) {
                     }
                 });
                 if (response.data){
-                    setExpenses(response.data.expenses);
+                    const fetchedExpenses = response.data.expenses;
+                    setExpenses(fetchedExpenses);
+                    let total = 0;
+                    fetchedExpenses.forEach(e => total += e.amount);
+                    setTotalSpent(total);
+                    console.log(total);
                 }
 
             } catch (error) {
