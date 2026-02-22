@@ -76,7 +76,9 @@ function DashboardPage ({name}) {
                         {/* buttons */}
                         <div className="flex flex-row gap-4 mt-4 mb-4">
                             <AddExpenseButton />
+                            {/* actual data */}
                             <TotalSpentCard totalSpent={totalSpent} />
+                            {/* hardcoded data */}
                             <TopCategoryCard category={'Utilities'} />
                             <TopExpenseCard name={'Gas Bill'} date={'5-Jan'} amount={3000} category={'Utilities'} />
                         </div>
