@@ -3,6 +3,7 @@ import AddExpenseButton from '../components/AddExpenseButton'
 import ExpenseItem from "../components/ExpenseItem";
 import TotalSpentCard from "../components/TotalSpentCard";
 import TopExpenseCard from "../components/TopExpenseCard";
+import TopCategoryCard from '../components/TopCategoryCard'
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -76,6 +77,7 @@ function DashboardPage ({name}) {
                         <div className="flex flex-row gap-4 mt-4 mb-4">
                             <AddExpenseButton />
                             <TotalSpentCard totalSpent={totalSpent} />
+                            <TopCategoryCard category={'Utilities'} />
                             <TopExpenseCard name={'Gas Bill'} date={'5-Jan'} amount={3000} category={'Utilities'} />
                         </div>
                         <h1 className="font-semibold mb-3 text-2xl">Expenses</h1>
