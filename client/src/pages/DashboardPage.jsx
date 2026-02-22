@@ -1,6 +1,8 @@
 import Greeting from "../components/Greeting";
 import AddExpenseButton from '../components/AddExpenseButton'
 import ExpenseItem from "../components/ExpenseItem";
+import TotalSpentCard from "../components/TotalSpentCard";
+import TopExpenseCard from "../components/TopExpenseCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -73,8 +75,8 @@ function DashboardPage ({name}) {
                         {/* buttons */}
                         <div className="flex flex-row gap-4 mt-4 mb-4">
                             <AddExpenseButton />
-                            <AddExpenseButton />
-                            <AddExpenseButton />
+                            <TotalSpentCard totalSpent={totalSpent} />
+                            <TopExpenseCard name={'Gas Bill'} date={'5-Jan'} amount={3000} category={'Utilities'} />
                         </div>
                         <h1 className="font-semibold mb-3 text-2xl">Expenses</h1>
                         {expenseError ?? <p className="text-red-600">Failed to fetch Expenses</p>}

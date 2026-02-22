@@ -47,7 +47,7 @@ export default function ExpenseItem({
   onUpdate, // callback for update
   handleDelete, // callback for delete
 }) {
-    const formattedDate = dayjs(dateCreated).format('D/M/YY');
+    const formattedDate = dayjs(dateCreated).format('D MMM YY');
     function getCategoryStyles(cat) {
         switch (cat) {
             // 🍔 Food
@@ -300,7 +300,7 @@ export default function ExpenseItem({
         <div className="flex items-center gap-4 h-16">
             {/* Amount */}
             <span className="text-lg font-semibold text-gray-800">
-                Rs {amount}
+                PKR {amount}
             </span>
 
             {/* Update Button */}
