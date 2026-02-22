@@ -5,18 +5,26 @@ import TotalSpentCard from "../components/TotalSpentCard";
 import TopExpenseCard from "../components/TopExpenseCard";
 import TopCategoryCard from '../components/TopCategoryCard'
 import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 import axios from "axios";
+
+// TODO
+// handle mostSpentError topExpenseError breakdownError on the ui
+// work on displaying the breakdown on the right side of the page
 
 function DashboardPage ({name}) {
 
     const [expenses, setExpenses] = useState([]);
     const [expenseError, setExpenseError] = useState(false);
 
-    // const [mostSpent, setMostSpent] = useState([]);
-    // const [mostSpentError, setMostSpentError] = useState(false);
+    const [mostSpent, setMostSpent] = useState({});
+    const [mostSpentError, setMostSpentError] = useState(false);
 
-    // const [breakdown, setBreakdown] = useState([]);
-    // const [breakdownError, setBreakdownError] = useState(false);
+    const [topExpense, setTopExpense] = useState({});
+    const [topExpenseError, setTopExpenseError] = useState(false);
+
+    const [breakdown, setBreakdown] = useState([]);
+    const [breakdownError, setBreakdownError] = useState(false);
 
     const [totalSpent, setTotalSpent] = useState(0);
 
@@ -32,19 +40,65 @@ function DashboardPage ({name}) {
                 if (response.data){
                     const fetchedExpenses = response.data.expenses;
                     setExpenses(fetchedExpenses);
+                    setExpenseError(false);
                     let total = 0;
                     fetchedExpenses.forEach(e => total += e.amount);
                     setTotalSpent(total);
-                    console.log(total);
                 }
 
             } catch (error) {
+                console.log(error);
                 if (error.response) {
                     setExpenseError(error.response.data.msg);
                 }
             }
         }
         getExpenses();
+    }, [])
+
+    useEffect(() => {
+        async function getInsights() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.get('http://localhost:3000/api/v1/insights/dashboard', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (response.data) {
+                    const data = response.data;
+
+                    const mostSpentErr = !data.mostSpentCategory
+                        ? 'Could not fetch most spent category'
+                        : false;
+
+                    const topExpenseErr = !data.highestExpense
+                        ? 'Could not fetch top expense'
+                        : false;
+
+                    const breakdownErr = !data.breakdown
+                        ? 'Could not fetch category breakdown'
+                        : false;
+
+                    setMostSpentError(mostSpentErr);
+                    setTopExpenseError(topExpenseErr);
+                    setBreakdownError(breakdownErr);
+
+                    setMostSpent(data.mostSpentCategory);
+                    setTopExpense(data.highestExpense);
+                    setBreakdown(data.breakdown);
+
+                    console.dir(data);
+                }
+            } catch (error) {
+                console.log(error);
+                if (error.response) {
+                    setMostSpentError(error.response.data.msg);
+
+                }
+            }
+        }
+        getInsights();
     }, [])
 
     const handleDelete = async (id) => {
@@ -79,8 +133,8 @@ function DashboardPage ({name}) {
                             {/* actual data */}
                             <TotalSpentCard totalSpent={totalSpent} />
                             {/* hardcoded data */}
-                            <TopCategoryCard category={'Utilities'} />
-                            <TopExpenseCard name={'Gas Bill'} date={'5-Jan'} amount={3000} category={'Utilities'} />
+                            <TopCategoryCard category={mostSpent.category} />
+                            <TopExpenseCard name={topExpense.name} date={dayjs(topExpense.date).format('DD MMM YY')} amount={topExpense.amount} category={topExpense.category} />
                         </div>
                         <h1 className="font-semibold mb-3 text-2xl">Expenses</h1>
                         {expenseError ?? <p className="text-red-600">Failed to fetch Expenses</p>}
