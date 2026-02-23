@@ -9,8 +9,9 @@ import dayjs from "dayjs";
 import axios from "axios";
 
 // TODO
-// handle mostSpentError topExpenseError breakdownError on the ui
+// handle mostSpentError topExpenseError on the ui
 // work on displaying the breakdown on the right side of the page
+// handle breakdownError on the ui
 
 function DashboardPage ({name}) {
 
@@ -127,27 +128,35 @@ function DashboardPage ({name}) {
                     <div className="mt-30 ml-20 w-50vh" >
                         {/* greeting */}
                         <Greeting name={name} />
-                        {/* buttons */}
+                        {/* add expense button and cards */}
                         <div className="flex flex-row gap-4 mt-4 mb-4">
                             <AddExpenseButton />
-                            {/* actual data */}
                             <TotalSpentCard totalSpent={totalSpent} />
-                            {/* hardcoded data */}
-                            <TopCategoryCard category={mostSpent.category} />
-                            <TopExpenseCard name={topExpense.name} date={dayjs(topExpense.date).format('DD MMM YY')} amount={topExpense.amount} category={topExpense.category} />
+                            {
+                                mostSpentError ? mostSpentError : 
+                                <TopCategoryCard category={mostSpent.category} />
+                            }
+                            {
+                                topExpenseError ? topExpenseError :
+                                <TopExpenseCard name={topExpense.name} date={dayjs(topExpense.date).format('DD MMM YY')} amount={topExpense.amount} category={topExpense.category} />
+                            }
                         </div>
                         <h1 className="font-semibold mb-3 text-2xl">Expenses</h1>
-                        {expenseError ?? <p className="text-red-600">Failed to fetch Expenses</p>}
-                        {expenses.map((expense) => {
-                            return <ExpenseItem     
-                                        key={expense._id} 
-                                        name={expense.name}     
-                                        category={expense.category} 
-                                        amount={expense.amount} 
-                                        dateCreated={expense.date} 
-                                        handleDelete={() => handleDelete(expense._id)}
-                                    />
-                        })}
+
+                        {
+                            expenseError ? <p className="text-red-600">Failed to fetch Expenses</p> : 
+                            expenses.map((expense) => {
+                                return <ExpenseItem     
+                                            key={expense._id} 
+                                            name={expense.name}     
+                                            category={expense.category} 
+                                            amount={expense.amount} 
+                                            dateCreated={expense.date} 
+                                            handleDelete={() => handleDelete(expense._id)}
+                                        />
+                            })
+                        }
+
                     </div>
                 </div>
                 <div className="border flex-2 h-full">div 2</div>
