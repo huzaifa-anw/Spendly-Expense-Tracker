@@ -7,9 +7,10 @@ import TopCategoryCard from '../components/TopCategoryCard'
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import axios from "axios";
+import { PieChart } from '@mui/x-charts/PieChart';
 
 // TODO
-// handle mostSpentError topExpenseError on the ui
+// handle mostSpentError topExpenseError on the ui done
 // work on displaying the breakdown on the right side of the page
 // handle breakdownError on the ui
 
@@ -87,9 +88,9 @@ function DashboardPage ({name}) {
 
                     setMostSpent(data.mostSpentCategory);
                     setTopExpense(data.highestExpense);
-                    setBreakdown(data.breakdown);
+                    setBreakdown(data.categoriesBreakdown);
 
-                    console.dir(data);
+                    console.dir(data.categoriesBreakdown);
                 }
             } catch (error) {
                 console.log(error);
@@ -122,10 +123,10 @@ function DashboardPage ({name}) {
     return (
         <>
 
-            <div className="flex flex-row">
-                <div className=" flex-8 h-screen w-1">
+            <div className="flex flex-row h-screen overflow-hidden">
+                <div className=" flex-8 w-1 h-full overflow-y-auto">
                     {/* main dashboard area */}
-                    <div className="mt-30 ml-20 w-50vh" >
+                    <div className="mt-30 ml-20 min-w-[50vh]" >
                         {/* greeting */}
                         <Greeting name={name} />
                         {/* add expense button and cards */}
@@ -159,7 +160,34 @@ function DashboardPage ({name}) {
 
                     </div>
                 </div>
-                <div className="border flex-2 h-full">div 2</div>
+                <div className="bg-blue-950 flex-2 flex flex-col items-center justify-center gap-8 h-full">
+                    <div>
+                        <PieChart 
+                            series={[
+                                {
+                                    data: breakdown.map((cat, idx) => ({id: idx, value: cat.totalSpent, label: cat.category})),
+                                    innerRadius: 30,
+                                    outerRadius: 100,
+                                    paddingAngle: 5,
+                                    cornerRadius: 5,
+                                    startAngle: -45,
+                                    endAngle: 225,
+                                }
+                            ]
+                            }
+                            width={200}
+                            height={200}
+                            slotProps={{
+                                legend: {
+                                direction: 'column',
+                                position: { vertical: 'bottom', horizontal: 'center' },
+                                padding: { top: 20 },
+                                sx: { color: 'white' },
+                                },
+                            }}
+                        />
+                    </div>
+                </div>
             </div>
         </>
     )
