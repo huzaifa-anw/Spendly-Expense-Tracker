@@ -56,7 +56,14 @@ function DashboardPage ({name}) {
             }
         }
         getExpenses();
-    }, [])
+    },[])
+
+    useEffect(() => {
+        let total = 0;
+        expenses.forEach(e => total += e.amount);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setTotalSpent(total);
+    }, [expenses])
 
     useEffect(() => {
         async function getInsights() {
@@ -78,7 +85,7 @@ function DashboardPage ({name}) {
                         ? 'Could not fetch top expense'
                         : false;
 
-                    const breakdownErr = !data.breakdown
+                    const breakdownErr = !data.categoriesBreakdown
                         ? 'Could not fetch category breakdown'
                         : false;
 
@@ -101,7 +108,7 @@ function DashboardPage ({name}) {
             }
         }
         getInsights();
-    }, [])
+    },[])
 
     const handleDelete = async (id) => {
         try {
@@ -126,7 +133,7 @@ function DashboardPage ({name}) {
             <div className="flex flex-row h-screen overflow-hidden">
                 <div className=" flex-8 w-1 h-full overflow-y-auto">
                     {/* main dashboard area */}
-                    <div className="mt-30 ml-20 min-w-[50vh]" >
+                    <div className="mt-30 ml-20 pr-8 min-w-[50vh]" >
                         {/* greeting */}
                         <Greeting name={name} />
                         {/* add expense button and cards */}
@@ -134,11 +141,11 @@ function DashboardPage ({name}) {
                             <AddExpenseButton />
                             <TotalSpentCard totalSpent={totalSpent} />
                             {
-                                mostSpentError ? mostSpentError : 
+                                mostSpentError ? <span className="text-red-500">{mostSpentError}</span> : 
                                 <TopCategoryCard category={mostSpent.category} />
                             }
                             {
-                                topExpenseError ? topExpenseError :
+                                topExpenseError ? <span className="text-red-500">{topExpenseError}</span> :
                                 <TopExpenseCard name={topExpense.name} date={dayjs(topExpense.date).format('DD MMM YY')} amount={topExpense.amount} category={topExpense.category} />
                             }
                         </div>
@@ -160,32 +167,35 @@ function DashboardPage ({name}) {
 
                     </div>
                 </div>
-                <div className="bg-blue-950 flex-2 flex flex-col items-center justify-center gap-8 h-full">
+                <div className="bg-blue-950 pl-2 flex-2 flex flex-col items-center justify-center gap-8 h-full">
                     <div>
-                        <PieChart 
-                            series={[
-                                {
-                                    data: breakdown.map((cat, idx) => ({id: idx, value: cat.totalSpent, label: cat.category})),
-                                    innerRadius: 30,
-                                    outerRadius: 100,
-                                    paddingAngle: 5,
-                                    cornerRadius: 5,
-                                    startAngle: -45,
-                                    endAngle: 225,
+                        {
+                            breakdownError ? <span className="text-red-500">{breakdownError}</span>  :
+                            <PieChart 
+                                series={[
+                                    {
+                                        data: breakdown.map((cat, idx) => ({id: idx, value: cat.totalSpent, label: cat.category})),
+                                        innerRadius: 30,
+                                        outerRadius: 100,
+                                        paddingAngle: 5,
+                                        cornerRadius: 5,
+                                        startAngle: -45,
+                                        endAngle: 225,
+                                    }
+                                ]
                                 }
-                            ]
-                            }
-                            width={200}
-                            height={200}
-                            slotProps={{
-                                legend: {
-                                direction: 'column',
-                                position: { vertical: 'bottom', horizontal: 'center' },
-                                padding: { top: 20 },
-                                sx: { color: 'white' },
-                                },
-                            }}
+                                width={200}
+                                height={200}
+                                slotProps={{
+                                    legend: {
+                                    direction: 'column',
+                                    position: { vertical: 'bottom', horizontal: 'center' },
+                                    padding: { top: 20 },
+                                    sx: { color: 'white' },
+                                    },
+                                }}
                         />
+                        }
                     </div>
                 </div>
             </div>
