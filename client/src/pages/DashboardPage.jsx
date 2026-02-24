@@ -12,6 +12,8 @@ import Modal from "../components/Modal";
 
 function DashboardPage ({name}) {
 
+    const [displayName, setDisplayName] = useState(name);
+
     const [expenses, setExpenses] = useState([]);
     const [expenseError, setExpenseError] = useState(false);
 
@@ -64,49 +66,51 @@ function DashboardPage ({name}) {
         setTotalSpent(total);
     }, [expenses])
 
-    useEffect(() => {
-        async function getInsights() {
-            try {
-                const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:3000/api/v1/insights/dashboard', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                if (response.data) {
-                    const data = response.data;
-
-                    const mostSpentErr = !data.mostSpentCategory
-                        ? 'Could not fetch most spent category'
-                        : false;
-
-                    const topExpenseErr = !data.highestExpense
-                        ? 'Could not fetch top expense'
-                        : false;
-
-                    const breakdownErr = !data.categoriesBreakdown
-                        ? 'Could not fetch category breakdown'
-                        : false;
-
-                    setMostSpentError(mostSpentErr);
-                    setTopExpenseError(topExpenseErr);
-                    setBreakdownError(breakdownErr);
-
-                    setMostSpent(data.mostSpentCategory);
-                    setTopExpense(data.highestExpense);
-                    setBreakdown(data.categoriesBreakdown);
-
+    async function getInsights() {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get('http://localhost:3000/api/v1/insights/dashboard', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
                 }
-            } catch (error) {
-                console.log(error);
-                if (error.response) {
-                    setMostSpentError(error.response.data.msg);
+            });
+            if (response.data) {
+                const data = response.data;
 
-                }
+                const mostSpentErr = !data.mostSpentCategory
+                    ? 'Could not fetch most spent category'
+                    : false;
+
+                const topExpenseErr = !data.highestExpense
+                    ? 'Could not fetch top expense'
+                    : false;
+
+                const breakdownErr = !data.categoriesBreakdown
+                    ? 'Could not fetch category breakdown'
+                    : false;
+
+                setMostSpentError(mostSpentErr);
+                setTopExpenseError(topExpenseErr);
+                setBreakdownError(breakdownErr);
+
+                setMostSpent(data.mostSpentCategory);
+                setTopExpense(data.highestExpense);
+                setBreakdown(data.categoriesBreakdown);
+
+            }
+        } catch (error) {
+            console.log(error);
+            if (error.response) {
+                setMostSpentError(error.response.data.msg);
+
             }
         }
+    }
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         getInsights();
-    },[expenses])
+    },[])
 
     const handleDelete = async (id) => {
         try {
@@ -118,6 +122,7 @@ function DashboardPage ({name}) {
                 }      
             );
             setExpenses(prev => prev.filter(expense => expense._id !== id) );
+            getInsights();
         } catch (error) {
             console.log(error);
             console.dir(error.response);
@@ -136,6 +141,7 @@ function DashboardPage ({name}) {
             );
             console.dir(response.data);
             setExpenses([response.data.expense, ...expenses]);
+            getInsights();
             setIsModalOpen(false);
         } catch (error) {
             console.log(error);
@@ -158,6 +164,7 @@ function DashboardPage ({name}) {
                 const filtered = prev.filter(expense => expense._id !== expenseToEdit._id);
                 return [response.data.updatedExpense, ...filtered];
             });
+            getInsights();
             setIsModalOpen(false);
         } catch (error) {
             console.log(error);
@@ -184,7 +191,7 @@ function DashboardPage ({name}) {
                     {/* main dashboard area */}
                     <div className="mt-30 ml-20 pr-8 min-w-[50vh]" >
                         {/* greeting */}
-                        <Greeting name={name} />
+                        <Greeting name={displayName} />
                         {/* add expense button and cards */}
                         <div className="flex flex-row gap-4 mt-4 mb-4">
                             <AddExpenseButton setIsModalOpen={setIsModalOpen} />
