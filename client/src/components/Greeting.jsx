@@ -1,3 +1,4 @@
+import React from 'react';
 const GREETINGS = [
         'Welcome back, name. Your financial dashboard awaits.',
         'Glad you\'re here, name. Let\'s optimize your spending.',
@@ -26,4 +27,4 @@ function Greeting ({name}) {
 
 }
 
-export default Greeting;
+export default React.memo(Greeting);

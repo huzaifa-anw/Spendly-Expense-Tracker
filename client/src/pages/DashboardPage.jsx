@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import Greeting from "../components/Greeting";
 import AddExpenseButton from '../components/AddExpenseButton'
 import ExpenseItem from "../components/ExpenseItem";
 import TotalSpentCard from "../components/TotalSpentCard";
 import TopExpenseCard from "../components/TopExpenseCard";
 import TopCategoryCard from '../components/TopCategoryCard'
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import dayjs from "dayjs";
 import axios from "axios";
 import { PieChart } from '@mui/x-charts/PieChart';
@@ -29,40 +30,30 @@ function DashboardPage () {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [expenseToEdit, setExpenseToEdit] = useState(null);
 
-    useEffect(() => {
-        async function getExpenses() {
-            try {
-                const token = localStorage.getItem('token')
-                const response = await axios.get('http://localhost:3000/api/v1/expenses', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                if (response.data){
-                    const fetchedExpenses = response.data.expenses;
-                    setExpenses(fetchedExpenses);
-                    setExpenseError(false);
-                    let total = 0;
-                    fetchedExpenses.forEach(e => total += e.amount);
-                    setTotalSpent(total);
+    async function getExpenses() {
+        try {
+            const token = localStorage.getItem('token')
+            const response = await axios.get('http://localhost:3000/api/v1/expenses', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
                 }
+            });
+            if (response.data){
+                const fetchedExpenses = response.data.expenses;
+                setExpenses(fetchedExpenses);
+                setExpenseError(false);
+                let total = 0;
+                fetchedExpenses.forEach(e => total += e.amount);
+                setTotalSpent(total);
+            }
 
-            } catch (error) {
-                console.log(error);
-                if (error.response) {
-                    setExpenseError(error.response.data.msg);
-                }
+        } catch (error) {
+            console.log(error);
+            if (error.response) {
+                setExpenseError(error.response.data.msg);
             }
         }
-        getExpenses();
-    },[])
-
-    useEffect(() => {
-        let total = 0;
-        expenses.forEach(e => total += e.amount);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setTotalSpent(total);
-    }, [expenses])
+    }
 
     async function getInsights() {
         try {
@@ -106,9 +97,16 @@ function DashboardPage () {
     }
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
+        getExpenses();
         getInsights();
     },[])
+
+    useEffect(() => {
+        let total = 0;
+        expenses.forEach(e => total += e.amount);
+        setTotalSpent(total);
+    }, [expenses])
+
 
     const handleDelete = async (id) => {
         try {
@@ -170,6 +168,7 @@ function DashboardPage () {
         }
     }
 
+    const name = useMemo(() => sessionStorage.getItem('name'), []);
 
     return (
         <>
@@ -189,7 +188,7 @@ function DashboardPage () {
                     {/* main dashboard area */}
                     <div className="mt-30 ml-20 pr-8 min-w-[50vh]" >
                         {/* greeting */}
-                        <Greeting name={sessionStorage.getItem('name')} />
+                        <Greeting name={name} />
                         {/* add expense button and cards */}
                         <div className="flex flex-row gap-4 mt-4 mb-4">
                             <AddExpenseButton setIsModalOpen={setIsModalOpen} />
