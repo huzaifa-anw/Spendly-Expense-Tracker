@@ -106,7 +106,7 @@ function DashboardPage ({name}) {
             }
         }
         getInsights();
-    },[])
+    },[expenses])
 
     const handleDelete = async (id) => {
         try {
