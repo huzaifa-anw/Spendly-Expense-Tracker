@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 
-function LoginCard({setName}) {
+function LoginCard() {
 
     const [form, setForm] = useState({ email: "", password: "" });
     const [loading, setLoading] = useState(false);
@@ -38,7 +38,7 @@ function LoginCard({setName}) {
                 setSuccess(true);
                 setLoading(false);
                 localStorage.setItem('token', response.data.accessToken);
-                setName(response.data.user.name);
+                sessionStorage.setItem('name', response.data.user.name);
                 navigate('/dashboard');
             }
             else{

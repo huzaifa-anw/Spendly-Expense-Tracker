@@ -1,9 +1,9 @@
 import LoginCard from "../components/LoginCard";
 
-function LoginPage ({setName}) {
+function LoginPage () {
     return (
         <>
-            <LoginCard setName={setName} />
+            <LoginCard />
         </>
     )
 }

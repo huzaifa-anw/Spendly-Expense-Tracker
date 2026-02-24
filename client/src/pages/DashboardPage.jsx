@@ -10,9 +10,7 @@ import axios from "axios";
 import { PieChart } from '@mui/x-charts/PieChart';
 import Modal from "../components/Modal";
 
-function DashboardPage ({name}) {
-
-    const [displayName, setDisplayName] = useState(name);
+function DashboardPage () {
 
     const [expenses, setExpenses] = useState([]);
     const [expenseError, setExpenseError] = useState(false);
@@ -191,7 +189,7 @@ function DashboardPage ({name}) {
                     {/* main dashboard area */}
                     <div className="mt-30 ml-20 pr-8 min-w-[50vh]" >
                         {/* greeting */}
-                        <Greeting name={displayName} />
+                        <Greeting name={sessionStorage.getItem('name')} />
                         {/* add expense button and cards */}
                         <div className="flex flex-row gap-4 mt-4 mb-4">
                             <AddExpenseButton setIsModalOpen={setIsModalOpen} />
