@@ -8,11 +8,7 @@ import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import axios from "axios";
 import { PieChart } from '@mui/x-charts/PieChart';
-
-// TODO
-// handle mostSpentError topExpenseError on the ui done
-// work on displaying the breakdown on the right side of the page
-// handle breakdownError on the ui
+import Modal from "../components/Modal";
 
 function DashboardPage ({name}) {
 
@@ -29,6 +25,9 @@ function DashboardPage ({name}) {
     const [breakdownError, setBreakdownError] = useState(false);
 
     const [totalSpent, setTotalSpent] = useState(0);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [expenseToEdit, setExpenseToEdit] = useState(null);
 
     useEffect(() => {
         async function getExpenses() {
@@ -97,7 +96,6 @@ function DashboardPage ({name}) {
                     setTopExpense(data.highestExpense);
                     setBreakdown(data.categoriesBreakdown);
 
-                    console.dir(data.categoriesBreakdown);
                 }
             } catch (error) {
                 console.log(error);
@@ -127,9 +125,60 @@ function DashboardPage ({name}) {
         }
     }
 
+    const handleCreate = async (data) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.post('http://localhost:3000/api/v1/expenses', data, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                } 
+            );
+            console.dir(response.data);
+            setExpenses([response.data.expense, ...expenses]);
+            setIsModalOpen(false);
+        } catch (error) {
+            console.log(error);
+            console.dir(error.response);
+            alert('Failed to create expense')
+        }
+    }
+    
+    const handleUpdate = async (data) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put(`http://localhost:3000/api/v1/expenses/${expenseToEdit._id}`, data, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                } 
+            );
+            console.log(response.data)
+            setExpenses(prev => {
+                const filtered = prev.filter(expense => expense._id !== expenseToEdit._id);
+                return [response.data.updatedExpense, ...filtered];
+            });
+            setIsModalOpen(false);
+        } catch (error) {
+            console.log(error);
+            alert('failed to update expense')
+        }
+    }
+
+
     return (
         <>
-
+            {isModalOpen && (
+                <Modal
+                    onClose={() => {
+                    setIsModalOpen(false);
+                    setExpenseToEdit(null);
+                    }}
+                    mode={expenseToEdit ? "edit" : "create"}
+                    initialData={expenseToEdit}
+                    onSubmit={expenseToEdit ? handleUpdate : handleCreate}
+                />
+            )}
             <div className="flex flex-row h-screen overflow-hidden">
                 <div className=" flex-8 w-1 h-full overflow-y-auto">
                     {/* main dashboard area */}
@@ -138,7 +187,7 @@ function DashboardPage ({name}) {
                         <Greeting name={name} />
                         {/* add expense button and cards */}
                         <div className="flex flex-row gap-4 mt-4 mb-4">
-                            <AddExpenseButton />
+                            <AddExpenseButton setIsModalOpen={setIsModalOpen} />
                             <TotalSpentCard totalSpent={totalSpent} />
                             {
                                 mostSpentError ? <span className="text-red-500">{mostSpentError}</span> : 
@@ -156,10 +205,9 @@ function DashboardPage ({name}) {
                             expenses.map((expense) => {
                                 return <ExpenseItem     
                                             key={expense._id} 
-                                            name={expense.name}     
-                                            category={expense.category} 
-                                            amount={expense.amount} 
-                                            dateCreated={expense.date} 
+                                            setIsModalOpen={setIsModalOpen}
+                                            setExpenseToEdit={setExpenseToEdit}
+                                            expense={expense} 
                                             handleDelete={() => handleDelete(expense._id)}
                                         />
                             })

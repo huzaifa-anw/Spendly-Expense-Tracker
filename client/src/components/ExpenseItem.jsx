@@ -40,14 +40,12 @@ import {
 import dayjs from 'dayjs';
 
 export default function ExpenseItem({
-  name,
-  category,
-  amount,
-  dateCreated,
-  onUpdate, // callback for update
+    setIsModalOpen,
+    setExpenseToEdit,
+  expense,
   handleDelete, // callback for delete
 }) {
-    const formattedDate = dayjs(dateCreated).format('D MMM YY');
+    const formattedDate = dayjs(expense.date).format('D MMM YY');
     function getCategoryStyles(cat) {
         switch (cat) {
             // 🍔 Food
@@ -262,9 +260,9 @@ export default function ExpenseItem({
         }
     }
 
-    const categoryStyles = getCategoryStyles(category);
+    const categoryStyles = getCategoryStyles(expense.category);
 
-    const categoryIcon = getCategoryIcon(category);
+    const categoryIcon = getCategoryIcon(expense.category);
     
   return (
     <div className="w-full mb-3 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 px-6 py-4 flex items-center justify-between">
@@ -281,7 +279,7 @@ export default function ExpenseItem({
         {/* Name + Date */}
         <div className="flex flex-col justify-center min-w-50">
             <h3 className="text-base font-semibold text-gray-800">
-            {name}
+            {expense.name}
             </h3>
             <span className="text-sm text-gray-500">
             {formattedDate}
@@ -292,7 +290,7 @@ export default function ExpenseItem({
         {/* MIDDLE SECTION - Category Name */}
         <div className="flex-1 flex items-center justify-center">
             <span className="text-sm font-medium text-gray-600">
-                {category}
+                {expense.category}
             </span>
         </div>
 
@@ -300,12 +298,16 @@ export default function ExpenseItem({
         <div className="flex items-center gap-4 h-16">
             {/* Amount */}
             <span className="text-lg font-semibold text-gray-800">
-                PKR {amount}
+                PKR {expense.amount}
             </span>
 
             {/* Update Button */}
             <button
-                onClick={onUpdate}
+                onClick={() => {
+                        setIsModalOpen(true);
+                        setExpenseToEdit(expense);
+                    }
+                }
                 className="p-2 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200 transition"
             >
                 <Edit2 size={16} />
