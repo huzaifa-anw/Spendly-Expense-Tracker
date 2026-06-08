@@ -36,7 +36,7 @@ function SignupCard() {
 
         try {
             const response = await axios.post(
-                `${API_BASE_URL}/v1/auth/register`,
+                `${API_BASE_URL}/api/v1/auth/register`,
                 { name: form.name, email: form.email, password: form.password }
             );
 

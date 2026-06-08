@@ -39,7 +39,7 @@ function DashboardPage () {
     async function getExpenses() {
         try {
             const token = localStorage.getItem('token')
-            const response = await axios.get(`${API_BASE_URL}/v1/expenses`, {
+            const response = await axios.get(`${API_BASE_URL}/api/v1/expenses`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -64,7 +64,7 @@ function DashboardPage () {
     async function getName() {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${API_BASE_URL}/v1/auth/me`, {
+            const response = await axios.get(`${API_BASE_URL}/api/v1/auth/me`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -80,7 +80,7 @@ function DashboardPage () {
     async function getInsights() {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${API_BASE_URL}/v1/insights/dashboard`, {
+            const response = await axios.get(`${API_BASE_URL}/api/v1/insights/dashboard`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -133,7 +133,7 @@ function DashboardPage () {
     const handleDelete = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`${API_BASE_URL}/v1/expenses/${id}`, {
+            await axios.delete(`${API_BASE_URL}/api/v1/expenses/${id}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -151,7 +151,7 @@ function DashboardPage () {
     const handleCreate = async (data) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post(`${API_BASE_URL}/v1/expenses`, data, {
+            const response = await axios.post(`${API_BASE_URL}/api/v1/expenses`, data, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -171,7 +171,7 @@ function DashboardPage () {
     const handleUpdate = async (data) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.put(`${API_BASE_URL}/v1/expenses/${expenseToEdit._id}`, data, {
+            const response = await axios.put(`${API_BASE_URL}/api/v1/expenses/${expenseToEdit._id}`, data, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

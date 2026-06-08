@@ -203,7 +203,7 @@ The client will run on `http://localhost:5173`
 
 ### Base URL
 ```
-http://localhost:3000/api/v1
+http://localhost:3000/
 ```
 
 ### Authentication Endpoints

@@ -31,7 +31,7 @@ function LoginCard() {
 
         try {
             const response = await axios.post(
-                `${API_BASE_URL}/v1/auth/login`,
+                `${API_BASE_URL}/api/v1/auth/login`,
                 { email: form.email, password: form.password }
             );
 
@@ -45,7 +45,7 @@ function LoginCard() {
             else{
                 setSuccess(false);
                 setLoading(false);
-                setError(response.data.msg || 'Signup Failed')
+                setError(response.data.msg || 'Login Failed')
             }
 
         } catch (err) {
