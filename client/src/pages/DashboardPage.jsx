@@ -8,7 +8,7 @@ import TopCategoryCard from '../components/TopCategoryCard'
 import { useEffect, useState, useMemo } from "react";
 import dayjs from "dayjs";
 import axios from "axios";
-import { API_BASE_URL } from "../config";
+import { API_BASE_URL } from "../config.js";
 import { PieChart } from '@mui/x-charts/PieChart';
 import Modal from "../components/Modal";
 import { useNavigate } from "react-router";

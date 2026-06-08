@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router";
-import { API_BASE_URL } from "../config";
+import { API_BASE_URL } from "../config.js";
 
 function SignupCard() {
 
