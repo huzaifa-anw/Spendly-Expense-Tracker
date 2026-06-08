@@ -210,7 +210,7 @@ function DashboardPage () {
                 />
             )}
             {/* NAVBAR */}
-            <div className="flex bg-black flex-col sm:flex-row sm:justify-between items-center px-4 sm:px-[2vw] pt-4 gap-4 sm:gap-0">
+            <div className="flex bg-black justify-between items-center px-4 sm:px-[2vw] pt-4 pb-4">
                 <img src="/spendly.png" alt="logo" className="h-10 sm:h-[7vh]" />
                 <button
                     onClick={handleLogout}
@@ -238,7 +238,7 @@ function DashboardPage () {
                         }
                         
                         {/* Chart Card */}
-                        <div className="col-span-1 sm:col-span-2 lg:col-span-1 border-gray-200 bg-white rounded-2xl p-4 sm:p-6 flex flex-col items-center justify-center">
+                        <div className="col-span-1 sm:col-span-2 lg:col-span-4 border-gray-200 bg-white rounded-2xl p-4 sm:p-6 flex flex-col items-center justify-center">
                             {
                                 breakdownError ? <span className="text-red-500 text-center">{breakdownError}</span>  :
                                 <PieChart 
