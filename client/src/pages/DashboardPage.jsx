@@ -10,11 +10,16 @@ import dayjs from "dayjs";
 import axios from "axios";
 import { PieChart } from '@mui/x-charts/PieChart';
 import Modal from "../components/Modal";
+import { useNavigate } from "react-router";
 
 function DashboardPage () {
 
+    const navigate = useNavigate();
+
     const [expenses, setExpenses] = useState([]);
     const [expenseError, setExpenseError] = useState(false);
+
+    const [name, setName] = useState('');
 
     const [mostSpent, setMostSpent] = useState({});
     const [mostSpentError, setMostSpentError] = useState(false);
@@ -55,6 +60,22 @@ function DashboardPage () {
         }
     }
 
+    async function getName() {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get('http://localhost:3000/api/v1/auth/me', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (response.data) {
+                setName(response.data.user.name.split(' ')[0]);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async function getInsights() {
         try {
             const token = localStorage.getItem('token');
@@ -88,7 +109,6 @@ function DashboardPage () {
 
             }
         } catch (error) {
-            console.log(error);
             if (error.response) {
                 setMostSpentError(error.response.data.msg);
 
@@ -99,6 +119,7 @@ function DashboardPage () {
     useEffect(() => {
         getExpenses();
         getInsights();
+        getName();
     },[])
 
     useEffect(() => {
@@ -168,9 +189,8 @@ function DashboardPage () {
         }
     }
 
-    const name = useMemo(() => sessionStorage.getItem('name'), []);
-
     const handleLogout = () => {
+        console.log('logging out');
         localStorage.removeItem("token");
         navigate("/login", { replace: true });
     };

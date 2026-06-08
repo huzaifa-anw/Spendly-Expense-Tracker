@@ -3,7 +3,7 @@ import LandingPage from "./pages/LandingPage";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
-import ProtetedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
                     <Route path="/login" element={<LoginPage /> } />
                     <Route path="/dashboard" element={
                         <ProtectedRoute>
-                            <Dashboard />
+                            <DashboardPage />
                         </ProtectedRoute>
                     } />
                     <Route path="*" element={<Navigate to="/" />} />
