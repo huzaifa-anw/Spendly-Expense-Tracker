@@ -170,6 +170,11 @@ function DashboardPage () {
 
     const name = useMemo(() => sessionStorage.getItem('name'), []);
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+    };
+
     return (
         <>
             {isModalOpen && (
@@ -183,27 +188,69 @@ function DashboardPage () {
                     onSubmit={expenseToEdit ? handleUpdate : handleCreate}
                 />
             )}
-            <div className="flex flex-row h-screen overflow-hidden">
-                <div className=" flex-8 w-1 h-full overflow-y-auto">
-                    {/* main dashboard area */}
-                    <div className="mt-30 ml-20 pr-8 min-w-[50vh]" >
-                        {/* greeting */}
-                        <Greeting name={name} />
-                        {/* add expense button and cards */}
-                        <div className="flex flex-row gap-4 mt-4 mb-4">
-                            <AddExpenseButton setIsModalOpen={setIsModalOpen} />
-                            <TotalSpentCard totalSpent={totalSpent} />
+            {/* NAVBAR */}
+            <div className="flex bg-black flex-col sm:flex-row sm:justify-between items-center px-4 sm:px-[2vw] pt-4 gap-4 sm:gap-0">
+                <img src="/spendly.png" alt="logo" className="h-10 sm:h-[7vh]" />
+                <button
+                    onClick={handleLogout}
+                    className="rounded-full bg-white text-black px-4 py-2 text-sm font-semibold hover:bg-gray-100 transition"
+                >
+                    Logout
+                </button>
+            </div>
+            <div className="min-h-screen overflow-hidden bg-gray-50">
+                <div className="px-4 sm:px-6 md:px-8 lg:px-10 xl:px-20 py-6 sm:py-8 lg:py-10">
+                    {/* greeting */}
+                    <Greeting name={name} />
+                    
+                    {/* add expense button and cards */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-4 mb-6">
+                        <AddExpenseButton setIsModalOpen={setIsModalOpen} />
+                        <TotalSpentCard totalSpent={totalSpent} />
+                        {
+                            mostSpentError ? <span className="text-red-500 col-span-1 sm:col-span-2 lg:col-span-1">{mostSpentError}</span> : 
+                            <TopCategoryCard category={mostSpent.category} />
+                        }
+                        {
+                            topExpenseError ? <span className="text-red-500 col-span-1 sm:col-span-2 lg:col-span-1">{topExpenseError}</span> :
+                            <TopExpenseCard name={topExpense.name} date={dayjs(topExpense.date).format('DD MMM YY')} amount={topExpense.amount} category={topExpense.category} />
+                        }
+                        
+                        {/* Chart Card */}
+                        <div className="col-span-1 sm:col-span-2 lg:col-span-1 border-gray-200 bg-white rounded-2xl p-4 sm:p-6 flex flex-col items-center justify-center">
                             {
-                                mostSpentError ? <span className="text-red-500">{mostSpentError}</span> : 
-                                <TopCategoryCard category={mostSpent.category} />
-                            }
-                            {
-                                topExpenseError ? <span className="text-red-500">{topExpenseError}</span> :
-                                <TopExpenseCard name={topExpense.name} date={dayjs(topExpense.date).format('DD MMM YY')} amount={topExpense.amount} category={topExpense.category} />
+                                breakdownError ? <span className="text-red-500 text-center">{breakdownError}</span>  :
+                                <PieChart 
+                                    series={[
+                                        {
+                                            data: breakdown.map((cat, idx) => ({id: idx, value: cat.totalSpent, label: cat.category})),
+                                            innerRadius: 15,
+                                            outerRadius: 55,
+                                            paddingAngle: 5,
+                                            cornerRadius: 5,
+                                            startAngle: -45,
+                                            endAngle: 225,
+                                        }
+                                    ]
+                                    }
+                                    width={window.innerWidth < 640 ? 180 : window.innerWidth < 1024 ? 200 : 220}
+                                    height={window.innerWidth < 640 ? 180 : window.innerWidth < 1024 ? 200 : 220}
+                                    slotProps={{
+                                        legend: {
+                                        direction: 'column',
+                                        position: { vertical: 'bottom', horizontal: 'center' },
+                                        padding: { top: 5 },
+                                        sx: { color: 'black', fontSize: '10px' },
+                                        },
+                                    }}
+                            />
                             }
                         </div>
-                        <h1 className="font-semibold mb-3 text-2xl">Expenses</h1>
+                    </div>
+                    
+                    <h1 className="font-semibold mb-4 text-xl sm:text-2xl">Expenses</h1>
 
+                    <div className="space-y-2 sm:space-y-3">
                         {
                             expenseError ? <p className="text-red-600">Failed to fetch Expenses</p> : 
                             expenses.map((expense) => {
@@ -215,38 +262,6 @@ function DashboardPage () {
                                             handleDelete={() => handleDelete(expense._id)}
                                         />
                             })
-                        }
-
-                    </div>
-                </div>
-                <div className="bg-blue-950 pl-2 flex-2 flex flex-col items-center justify-center gap-8 h-full">
-                    <div>
-                        {
-                            breakdownError ? <span className="text-red-500">{breakdownError}</span>  :
-                            <PieChart 
-                                series={[
-                                    {
-                                        data: breakdown.map((cat, idx) => ({id: idx, value: cat.totalSpent, label: cat.category})),
-                                        innerRadius: 30,
-                                        outerRadius: 100,
-                                        paddingAngle: 5,
-                                        cornerRadius: 5,
-                                        startAngle: -45,
-                                        endAngle: 225,
-                                    }
-                                ]
-                                }
-                                width={200}
-                                height={200}
-                                slotProps={{
-                                    legend: {
-                                    direction: 'column',
-                                    position: { vertical: 'bottom', horizontal: 'center' },
-                                    padding: { top: 20 },
-                                    sx: { color: 'white' },
-                                    },
-                                }}
-                        />
                         }
                     </div>
                 </div>

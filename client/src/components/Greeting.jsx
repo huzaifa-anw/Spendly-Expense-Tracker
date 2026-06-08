@@ -16,10 +16,8 @@ const generateGreeting = () => {
 }
 
 function Greeting ({name}) {
-
-    const firstName = name.split(' ')[0];
     
-    const greeting = generateGreeting().replace('name', firstName);
+    const greeting = generateGreeting().replace('name', name);
 
     return (
         <p className="text-black font-semibold text-3xl">{greeting}</p>

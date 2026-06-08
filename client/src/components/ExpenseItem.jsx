@@ -35,7 +35,8 @@ import {
     MoreHorizontal,
     Package,
     Plug,
-    Building2
+    Building2,
+    Tv
 } from "lucide-react";
 import dayjs from 'dayjs';
 
@@ -265,61 +266,63 @@ export default function ExpenseItem({
     const categoryIcon = getCategoryIcon(expense.category);
     
   return (
-    <div className="w-full mb-3 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 px-6 py-4 flex items-center justify-between">
+    <div className="w-full mb-3 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+            
+            {/* LEFT SECTION - Icon, Name, Date */}
+            <div className="flex items-center gap-3 sm:gap-4">
+                {/* Category Icon */}
+                <div
+                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl shrink-0 flex items-center justify-center ${categoryStyles}`}
+                >
+                    {categoryIcon}
+                </div>
 
-        {/* LEFT SECTION */}
-        <div className="flex items-center gap-4 h-16">
-            {/* Category Icon */}
-            <div
-                className={`w-12 h-12 rounded-xl shrink-0 flex items-center justify-center ${categoryStyles}`}
-            >
-                {categoryIcon}
-        </div>
+                {/* Name + Date */}
+                <div className="flex flex-col justify-center min-w-0">
+                    <h3 className="text-sm sm:text-base font-semibold text-gray-800 truncate">
+                        {expense.name}
+                    </h3>
+                    <span className="text-xs sm:text-sm text-gray-500">
+                        {formattedDate}
+                    </span>
+                </div>
+            </div>
 
-        {/* Name + Date */}
-        <div className="flex flex-col justify-center min-w-50">
-            <h3 className="text-base font-semibold text-gray-800">
-            {expense.name}
-            </h3>
-            <span className="text-sm text-gray-500">
-            {formattedDate}
-            </span>
-        </div>
-        </div>
+            {/* RIGHT SECTION - Category, Amount, Buttons */}
+            <div className="flex items-center justify-between sm:gap-3 md:gap-4 ml-auto">
+                {/* Category Name - hidden on mobile */}
+                <span className="text-xs sm:text-sm font-medium text-gray-600 hidden sm:inline">
+                    {expense.category}
+                </span>
 
-        {/* MIDDLE SECTION - Category Name */}
-        <div className="flex-1 flex items-center justify-center">
-            <span className="text-sm font-medium text-gray-600">
-                {expense.category}
-            </span>
-        </div>
+                {/* Amount */}
+                <span className="text-base sm:text-lg font-semibold text-gray-800 whitespace-nowrap">
+                    PKR {expense.amount}
+                </span>
 
-        {/* RIGHT SECTION */}
-        <div className="flex items-center gap-4 h-16">
-            {/* Amount */}
-            <span className="text-lg font-semibold text-gray-800">
-                PKR {expense.amount}
-            </span>
+                {/* Buttons */}
+                <div className="flex items-center gap-2 ml-2 sm:ml-0">
+                    {/* Update Button */}
+                    <button
+                        onClick={() => {
+                            setIsModalOpen(true);
+                            setExpenseToEdit(expense);
+                        }}
+                        className="p-1.5 sm:p-2 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200 transition shrink-0"
+                    >
+                        <Edit2 size={16} />
+                    </button>
 
-            {/* Update Button */}
-            <button
-                onClick={() => {
-                        setIsModalOpen(true);
-                        setExpenseToEdit(expense);
-                    }
-                }
-                className="p-2 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200 transition"
-            >
-                <Edit2 size={16} />
-            </button>
-
-            {/* Delete Button */}
-            <button
-                onClick={handleDelete}
-                className="p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition"
-            >
-                <Trash2 size={16} />
-            </button>
+                    {/* Delete Button */}
+                    <button
+                        onClick={handleDelete}
+                        className="p-1.5 sm:p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition shrink-0"
+                    >
+                        <Trash2 size={16} />
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
   );
