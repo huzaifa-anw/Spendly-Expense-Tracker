@@ -11,7 +11,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../config.js";
 import { PieChart } from '@mui/x-charts/PieChart';
 import Modal from "../components/Modal";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 function DashboardPage () {
 

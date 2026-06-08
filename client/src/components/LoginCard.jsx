@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
 import { API_BASE_URL } from "../config.js";
 
 function LoginCard() {
@@ -26,7 +26,7 @@ function LoginCard() {
         }
 
         setLoading(true);
-        setError(false);
+        setError("");
         setSuccess(false);
 
         try {
