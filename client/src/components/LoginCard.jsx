@@ -106,9 +106,9 @@ function LoginCard() {
 
         <p className="mt-4 text-sm text-gray-500 text-center">
           Don't have an account?{" "}
-          <a href="/signup" className="text-blue-600 hover:underline">
+          <Link to="/signup" className="text-blue-600 hover:underline">
             Sign Up
-          </a>
+          </Link>
         </p>
       </div>
     </div>
