@@ -171,8 +171,8 @@ function DashboardPage () {
     const name = useMemo(() => sessionStorage.getItem('name'), []);
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
-        window.location.href = '/login';
+        localStorage.removeItem("token");
+        navigate("/login", { replace: true });
     };
 
     return (
