@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router";
+import { API_BASE_URL } from "../config";
 
 function SignupCard() {
 
@@ -35,7 +36,7 @@ function SignupCard() {
 
         try {
             const response = await axios.post(
-                "http://localhost:3000/api/v1/auth/register",
+                `${API_BASE_URL}/v1/auth/register`,
                 { name: form.name, email: form.email, password: form.password }
             );
 

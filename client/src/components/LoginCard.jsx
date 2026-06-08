@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { API_BASE_URL } from "../config";
 
 function LoginCard() {
 
@@ -30,7 +31,7 @@ function LoginCard() {
 
         try {
             const response = await axios.post(
-                "http://localhost:3000/api/v1/auth/login",
+                `${API_BASE_URL}/v1/auth/login`,
                 { email: form.email, password: form.password }
             );
 
